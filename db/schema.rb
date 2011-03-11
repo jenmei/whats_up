@@ -36,4 +36,13 @@ ActiveRecord::Schema.define(:version => 20110311193611) do
     t.datetime "updated_at"
   end
 
+  create_table "tweets", :force => true do |t|
+    t.text     "content"
+    t.string   "author"
+    t.datetime "date"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
 end

@@ -1,0 +1,21 @@
+<h1>Listing tweets</h1>
+
+<table>
+  <tr>
+    <th>Content</th>
+    <th>Author</th>
+    <th>Date</th>
+    <th>Url</th>
+  </tr>
+
+<% @tweets.each do |tweet| %>
+  <tr>
+    <td><%= tweet.content %></td>
+	<td><%= link_to tweet.author, "http://twitter.com/#{tweet.author}" %></td>
+	<td><%= tweet.date.to_s(:human) %></td>
+    <td><%= link_to tweet.url, tweet.url %></td>
+  </tr>
+<% end %>
+</table>
+<%= link_to "Pull Tweets", pull_tweets_tweets_path %>
+<br />
