@@ -4,6 +4,9 @@ WhatsUp::Application.routes.draw do
 		post "pull_tweets"
 	end
   end
+  resources :alerts
+
+  resources :events
 
   match '/syndication' => 'homepage#syndication'
 
