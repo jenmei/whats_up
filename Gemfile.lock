@@ -143,6 +143,7 @@ DEPENDENCIES
   capybara
   haml
   launchy
+  nokogiri
   pivotal_git_scripts
   rails (= 3.0.5)
   rspec-rails

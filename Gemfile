@@ -9,6 +9,7 @@ gem 'sqlite3'
 gem 'haml'
 gem 'twitter'
 
+gem 'nokogiri'
 group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'

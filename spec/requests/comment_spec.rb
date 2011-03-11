@@ -3,6 +3,7 @@ require 'spec_helper'
 describe "Comments" do
   describe "GET comments" do
     before do
+      Article.delete_all
       @article = Article.create({:title    => "Test Article", 
                               :content  => "Fancy content", 
                               :date     => DateTime.now})

@@ -80,4 +80,9 @@ class ArticlesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  def pull_articles
+    Article.fetch_osu
+    redirect_to(articles_path, :notice => "Articles fetched")
+  end
 end

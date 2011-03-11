@@ -1,3 +1,5 @@
+<p id="notice"><%= notice %></p>
+
 <h1>Listing articles</h1>
 
 <table>
@@ -25,3 +27,9 @@
 <br />
 
 <%= link_to 'New Article', new_article_path %>
+
+<br />
+<br />
+<%= form_tag pull_articles_articles_path %>
+<%= submit_tag 'Fetch Articles From OSU' %>
+</form>
