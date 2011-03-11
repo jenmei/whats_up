@@ -1,0 +1,186 @@
+/* OSU Palette
+  -----------
+  Warm Gray: #C6C0B7
+  Intermediate Gray: #ABADA4
+  DArk gray/BROWN: #615042
+  OSU Orange: #D85A1A
+  Brown: #9D601E
+  Light Blue: #A7C4C9
+  DArk Blue: #6B859E
+  Yellow: #F3D08E
+  Green: #B3BA35
+  Turqoise: #56IF4B  
+*/
+/* Colors */
+$secondary_color: #350608; /*background and h1 headers currently*/
+$osu_orange: #D85A1A;
+$text_color: #f1f1f1;
+
+@mixin border_top {
+  border-top:4px solid $osu_orange;
+}
+@mixin rounded_corner {
+  $size: 8px;
+  -moz-border-radius:$size;
+  border-radius:$size;
+  border:1px solid #000;
+}
+html {
+  background-color:$secondary_color;
+  @include border-top;
+}
+body {
+  background:$secondary_color;
+  font-family:Verdana, Helvetica, Arial;
+  font-size:80%;
+}
+#footer {
+  @include border-top;
+  color:#f1f1f1; 
+  padding: 2em;
+}
+#content {
+  background-color:#f1f1f1;
+  padding:.5em 1em;
+  color:#333;
+  margin:0 2em 1.5em 2em;
+  @include rounded_corner;  
+}
+p {
+  margin-bottom:.8em;
+}
+a {
+  color:$osu_orange;
+  border-bottom:1px dotted #D85A1A;
+  text-decoration: none;
+}
+a:hover {
+  color:#f1f1f1;
+  border-bottom:1px solid #D85A1A;
+  background-color:$osu_orange;
+}
+p + ul {
+  margin-top:-.5em;
+}
+a:hover {
+  text-decoration:none;
+}
+em {
+  font-style:italic;
+}
+strong {
+  font-weight:bold;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5 {
+  font-weight:bold;
+  margin-bottom:.5em;
+}
+h3 {
+  margin-bottom:0;
+}
+h1 {
+  font-size:150%;
+  color:#f1f1f1;
+  padding:.5em 2em;
+}
+h2, h4 {
+  color:$secondary_color;
+}
+#hd h1 {
+  color:#e1e1e1;
+  margin-top:.3em;
+}
+h2 {
+  font-size:135%;
+}
+h3, h5 {
+  color:#D85A1A;
+}
+h3 {
+  font-size:120%;
+}
+h4, h5 {
+  font-size:105%%;
+}
+/* end headers */
+
+/* Lists */
+li {
+  list-style-type:disc;
+  margin-left:2.2em;
+}
+/* Floats and others */
+.text-right {
+  text-align:right;
+}
+.float-left {
+  float:left;
+}
+.float-right {
+  float:right;
+} 
+div.date {
+  font-style:italic;
+  font-size:70%;
+  color:#666;
+  margin-bottom:5px;
+}
+/* end floats and others */
+
+/* Tables */
+table {
+  margin-bottom:1em;
+  border:1px solid #615042;
+  border-collapse:separate;
+}
+caption {
+  font-weight:bold;
+  font-size:105%;
+  background-color:#615042;
+  color:#f1f1f1;
+  padding:.4em 1em;
+}
+thead {
+  background-color:#6B859E;
+  color:#f1f1f1;
+}
+tbody {
+  background-color:#fff;
+}
+tfoot {
+  background-color:#6B859E;
+  color:#f1f1f1;
+}
+th {
+  padding:.4em 1em;
+  font-weight:bold;
+  font-size:95%;
+}
+td {
+  padding:.3em .9em;
+ 
+}
+td + td, th + th {
+  border-left:1px solid #615042;
+}
+tfoot tr td {
+  border-top:1px solid #615042;
+}
+tr:nth-child(even) { 
+  background-color: #DEDAD4;
+}
+
+th.sortable a, th.sorted a {
+  display:block;
+  color:#fff;
+  padding-right:1em;
+  background:url('images/run.png') center right no-repeat;
+}
+th.sorted a {
+  background:url('images/down_arrow.png') center right no-repeat;
+}
+/* end tables */
+
+

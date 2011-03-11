@@ -1,0 +1,10 @@
+<div id="articles">
+  <h2>Articles</h2>
+  <% @article.each do |a|  %>
+    <h3><%= a.title %></h3>
+    <div class="date"><%= a.date %></div>
+    <p><%= a.content %></p>
+  <% end %>
+</div>
+
+<a href="#">Testo</a>

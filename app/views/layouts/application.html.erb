@@ -2,13 +2,18 @@
 <html>
 <head>
   <title>WhatsUp</title>
+  <link href="http://yui.yahooapis.com/3.2.0/build/cssreset/reset-min.css" type="text/css" rel="stylesheet">
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
 </head>
 <body>
-
-<%= yield %>
-
+<h1> Super Awesome App </h1>
+<div id="content">
+  <%= yield %>
+</div>
+<div id="footer">
+  @copyright CWS 
+<div>
 </body>
 </html>

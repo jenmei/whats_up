@@ -1,0 +1,820 @@
+diff --git a/.gitignore b/.gitignore
+index f0fa30c..5639850 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,4 +1,8 @@
++.*.swp
+ .bundle
+ db/*.sqlite3
+ log/*.log
+ tmp/
++public/.*
++public/stylesheets/.*
++app/views/layouts/.*
+diff --git a/.pairs b/.pairs
+new file mode 100644
+index 0000000..8d5091f
+--- /dev/null
++++ b/.pairs
+@@ -0,0 +1,14 @@
++pairs:
++  mh: Matt Hansen
++  rm: Ricky Middaugh
++  mc: Mauricio Cordoba
++  je: Jeremy Echols
++  kl: Kenneth Lett
++  zp: Zach Payne
++  jz: Josh Zojonc
++  jc: Jose Cedeno
++  bc: Barry Chen
++email:
++  prefix: pair
++  domain: oregonstate.edu
++
+diff --git a/app/controllers/comments_controller.rb b/app/controllers/comments_controller.rb
+new file mode 100644
+index 0000000..6779c61
+--- /dev/null
++++ b/app/controllers/comments_controller.rb
+@@ -0,0 +1,20 @@
++class CommentsController < ApplicationController
++  
++  before_filter :find_article
++  
++  def create
++    @comment = Comment.new(params[:comment])
++    @comment.article_id = @article.id
++    if @comment.save
++      redirect_to @article
++    else
++      render @article
++    end
++  end
++  
++  private
++    def find_article
++      @article = Article.find(params[:article_id])
++    end
++
++end
+diff --git a/app/controllers/homepage_controller.rb b/app/controllers/homepage_controller.rb
+new file mode 100644
+index 0000000..1c053ea
+--- /dev/null
++++ b/app/controllers/homepage_controller.rb
+@@ -0,0 +1,6 @@
++class HomepageController < ApplicationController
++
++  def index
++    @article = Article.all
++  end
++end
+diff --git a/app/helpers/comments_helper.rb b/app/helpers/comments_helper.rb
+new file mode 100644
+index 0000000..0ec9ca5
+--- /dev/null
++++ b/app/helpers/comments_helper.rb
+@@ -0,0 +1,2 @@
++module CommentsHelper
++end
+diff --git a/app/helpers/homepage_helper.rb b/app/helpers/homepage_helper.rb
+new file mode 100644
+index 0000000..c5bbfe5
+--- /dev/null
++++ b/app/helpers/homepage_helper.rb
+@@ -0,0 +1,2 @@
++module HomepageHelper
++end
+diff --git a/app/models/article.rb b/app/models/article.rb
+index b7ac9f7..d1bf406 100644
+--- a/app/models/article.rb
++++ b/app/models/article.rb
+@@ -1,2 +1,5 @@
+ class Article < ActiveRecord::Base
++
++  has_many :comments
++
+ end
+diff --git a/app/models/comment.rb b/app/models/comment.rb
+new file mode 100644
+index 0000000..bce990b
+--- /dev/null
++++ b/app/models/comment.rb
+@@ -0,0 +1,8 @@
++class Comment < ActiveRecord::Base
++  
++  belongs_to :article
++  
++  validates_presence_of :name, :body
++  validates_associated :article
++  
++end
+diff --git a/app/views/articles/show.html.erb b/app/views/articles/show.html.erb
+index 420f1fd..771aa77 100644
+--- a/app/views/articles/show.html.erb
++++ b/app/views/articles/show.html.erb
+@@ -15,6 +15,29 @@
+   <%= @article.content %>
+ </p>
+ 
++<h2>Comments</h2>
++<% @article.comments.each do |comment| %>
++<div class="comment">
++<div class="comment_name"><i><%= comment.name %> @ <%= comment.created_at %></i></div>
++<div class="comment_body"><%= comment.body %></div>
++</div>
++<% end %>
++
++<h2>Add A Comment</h2>
++<% form_for [@article, @article.comments.build] do |f| %>
++<p>
++  <%= f.label :name %>
++  <%= f.text_field :name %>
++</p>
++
++<p>
++  <%= f.label :body %>
++  <%= f.text_area :body, :size => '30x5' %>
++</p>
++
++<p><%= f.submit 'Save' %></p>
++<% end %>
++
+ 
+ <%= link_to 'Edit', edit_article_path(@article) %> |
+ <%= link_to 'Back', articles_path %>
+diff --git a/app/views/comments/create.html.erb b/app/views/comments/create.html.erb
+new file mode 100644
+index 0000000..7990995
+--- /dev/null
++++ b/app/views/comments/create.html.erb
+@@ -0,0 +1,2 @@
++<h1>Comments#create</h1>
++<p>Find me in app/views/comments/create.html.erb</p>
+diff --git a/app/views/homepage/index.html.erb b/app/views/homepage/index.html.erb
+new file mode 100644
+index 0000000..d693f3b
+--- /dev/null
++++ b/app/views/homepage/index.html.erb
+@@ -0,0 +1,10 @@
++<div id="articles">
++  <h2>Articles</h2>
++  <% @article.each do |a|  %>
++    <h3><%= a.title %></h3>
++    <div class="date"><%= a.date %></div>
++    <p><%= a.content %></p>
++  <% end %>
++</div>
++
++<a href="#">Testo</a>
+diff --git a/app/views/layouts/application.html.erb b/app/views/layouts/application.html.erb
+index d76f0c5..6e74153 100644
+--- a/app/views/layouts/application.html.erb
++++ b/app/views/layouts/application.html.erb
+@@ -2,13 +2,18 @@
+ <html>
+ <head>
+   <title>WhatsUp</title>
++  <link href="http://yui.yahooapis.com/3.2.0/build/cssreset/reset-min.css" type="text/css" rel="stylesheet">
+   <%= stylesheet_link_tag :all %>
+   <%= javascript_include_tag :defaults %>
+   <%= csrf_meta_tag %>
+ </head>
+ <body>
+-
+-<%= yield %>
+-
++<h1> Super Awesome App </h1>
++<div id="content">
++  <%= yield %>
++</div>
++<div id="footer">
++  @copyright CWS 
++<div>
+ </body>
+ </html>
+diff --git a/config/routes.rb b/config/routes.rb
+index ca82cde..798ac88 100644
+--- a/config/routes.rb
++++ b/config/routes.rb
+@@ -1,7 +1,11 @@
+ WhatsUp::Application.routes.draw do
++
+   resources :events
+ 
+-  resources :articles
++  resources :articles do
++    resources :comments, :only => [:create]
++  end
++  root :to => "homepage#index"
+ 
+   # The priority is based upon order of creation:
+   # first created -> highest priority.
+diff --git a/db/migrate/20110311193611_create_comments.rb b/db/migrate/20110311193611_create_comments.rb
+new file mode 100644
+index 0000000..a09bf0d
+--- /dev/null
++++ b/db/migrate/20110311193611_create_comments.rb
+@@ -0,0 +1,15 @@
++class CreateComments < ActiveRecord::Migration
++  def self.up
++    create_table :comments do |t|
++      t.integer :article_id
++      t.string :name
++      t.text :body
++
++      t.timestamps
++    end
++  end
++
++  def self.down
++    drop_table :comments
++  end
++end
+diff --git a/db/schema.rb b/db/schema.rb
+index 970f19c..0db5293 100644
+--- a/db/schema.rb
++++ b/db/schema.rb
+@@ -10,7 +10,7 @@
+ #
+ # It's strongly recommended to check this file into your version control system.
+ 
+-ActiveRecord::Schema.define(:version => 20110311181120) do
++ActiveRecord::Schema.define(:version => 20110311193611) do
+ 
+   create_table "articles", :force => true do |t|
+     t.string   "title"
+@@ -20,6 +20,14 @@ ActiveRecord::Schema.define(:version => 20110311181120) do
+     t.datetime "updated_at"
+   end
+ 
++  create_table "comments", :force => true do |t|
++    t.integer  "article_id"
++    t.string   "name"
++    t.text     "body"
++    t.datetime "created_at"
++    t.datetime "updated_at"
++  end
++
+   create_table "events", :force => true do |t|
+     t.date     "date"
+     t.string   "title"
+diff --git a/public/stylesheets/style.css b/public/stylesheets/style.css
+new file mode 100644
+index 0000000..d98feda
+--- /dev/null
++++ b/public/stylesheets/style.css
+@@ -0,0 +1,169 @@
++/* OSU Palette
++  -----------
++  Warm Gray: #C6C0B7
++  Intermediate Gray: #ABADA4
++  DArk gray/BROWN: #615042
++  OSU Orange: #D85A1A
++  Brown: #9D601E
++  Light Blue: #A7C4C9
++  DArk Blue: #6B859E
++  Yellow: #F3D08E
++  Green: #B3BA35
++  Turqoise: #56IF4B  
++*/
++/* Colors */
++/*background and h1 headers currently*/
++html {
++  background-color: #350608;
++  border-top: 4px solid #d85a1a; }
++
++body {
++  background: #350608;
++  font-family: Verdana, Helvetica, Arial;
++  font-size: 80%; }
++
++#footer {
++  border-top: 4px solid #d85a1a;
++  color: #f1f1f1;
++  padding: 2em; }
++
++#content {
++  background-color: #f1f1f1;
++  padding: .5em 1em;
++  color: #333;
++  margin: 0 2em 1.5em 2em;
++  -moz-border-radius: 8px;
++  border-radius: 8px;
++  border: 1px solid #000; }
++
++p {
++  margin-bottom: .8em; }
++
++a {
++  color: #d85a1a;
++  border-bottom: 1px dotted #D85A1A;
++  text-decoration: none; }
++
++a:hover {
++  color: #f1f1f1;
++  border-bottom: 1px solid #D85A1A;
++  background-color: #d85a1a; }
++
++p + ul {
++  margin-top: -0.5em; }
++
++a:hover {
++  text-decoration: none; }
++
++em {
++  font-style: italic; }
++
++strong {
++  font-weight: bold; }
++
++/* Headers */
++h1, h2, h3, h4, h5 {
++  font-weight: bold;
++  margin-bottom: .5em; }
++
++h3 {
++  margin-bottom: 0; }
++
++h1 {
++  font-size: 150%;
++  color: #f1f1f1;
++  padding: .5em 2em; }
++
++h2, h4 {
++  color: #350608; }
++
++#hd h1 {
++  color: #e1e1e1;
++  margin-top: .3em; }
++
++h2 {
++  font-size: 135%; }
++
++h3, h5 {
++  color: #D85A1A; }
++
++h3 {
++  font-size: 120%; }
++
++h4, h5 {
++  font-size: 105%%; }
++
++/* end headers */
++/* Lists */
++li {
++  list-style-type: disc;
++  margin-left: 2.2em; }
++
++/* Floats and others */
++.text-right {
++  text-align: right; }
++
++.float-left {
++  float: left; }
++
++.float-right {
++  float: right; }
++
++div.date {
++  font-style: italic;
++  font-size: 70%;
++  color: #666;
++  margin-bottom: 5px; }
++
++/* end floats and others */
++/* Tables */
++table {
++  margin-bottom: 1em;
++  border: 1px solid #615042;
++  border-collapse: separate; }
++
++caption {
++  font-weight: bold;
++  font-size: 105%;
++  background-color: #615042;
++  color: #f1f1f1;
++  padding: .4em 1em; }
++
++thead {
++  background-color: #6B859E;
++  color: #f1f1f1; }
++
++tbody {
++  background-color: #fff; }
++
++tfoot {
++  background-color: #6B859E;
++  color: #f1f1f1; }
++
++th {
++  padding: .4em 1em;
++  font-weight: bold;
++  font-size: 95%; }
++
++td {
++  padding: .3em .9em; }
++
++td + td, th + th {
++  border-left: 1px solid #615042; }
++
++tfoot tr td {
++  border-top: 1px solid #615042; }
++
++tr:nth-child(even) {
++  background-color: #DEDAD4; }
++
++th.sortable a, th.sorted a {
++  display: block;
++  color: #fff;
++  padding-right: 1em;
++  background: url("images/run.png") center right no-repeat; }
++
++th.sorted a {
++  background: url("images/down_arrow.png") center right no-repeat; }
++
++/* end tables */
+diff --git a/public/stylesheets/style.scss b/public/stylesheets/style.scss
+new file mode 100644
+index 0000000..390bec2
+--- /dev/null
++++ b/public/stylesheets/style.scss
+@@ -0,0 +1,186 @@
++/* OSU Palette
++  -----------
++  Warm Gray: #C6C0B7
++  Intermediate Gray: #ABADA4
++  DArk gray/BROWN: #615042
++  OSU Orange: #D85A1A
++  Brown: #9D601E
++  Light Blue: #A7C4C9
++  DArk Blue: #6B859E
++  Yellow: #F3D08E
++  Green: #B3BA35
++  Turqoise: #56IF4B  
++*/
++/* Colors */
++$secondary_color: #350608; /*background and h1 headers currently*/
++$osu_orange: #D85A1A;
++$text_color: #f1f1f1;
++
++@mixin border_top {
++  border-top:4px solid $osu_orange;
++}
++@mixin rounded_corner {
++  $size: 8px;
++  -moz-border-radius:$size;
++  border-radius:$size;
++  border:1px solid #000;
++}
++html {
++  background-color:$secondary_color;
++  @include border-top;
++}
++body {
++  background:$secondary_color;
++  font-family:Verdana, Helvetica, Arial;
++  font-size:80%;
++}
++#footer {
++  @include border-top;
++  color:#f1f1f1; 
++  padding: 2em;
++}
++#content {
++  background-color:#f1f1f1;
++  padding:.5em 1em;
++  color:#333;
++  margin:0 2em 1.5em 2em;
++  @include rounded_corner;  
++}
++p {
++  margin-bottom:.8em;
++}
++a {
++  color:$osu_orange;
++  border-bottom:1px dotted #D85A1A;
++  text-decoration: none;
++}
++a:hover {
++  color:#f1f1f1;
++  border-bottom:1px solid #D85A1A;
++  background-color:$osu_orange;
++}
++p + ul {
++  margin-top:-.5em;
++}
++a:hover {
++  text-decoration:none;
++}
++em {
++  font-style:italic;
++}
++strong {
++  font-weight:bold;
++}
++
++/* Headers */
++h1, h2, h3, h4, h5 {
++  font-weight:bold;
++  margin-bottom:.5em;
++}
++h3 {
++  margin-bottom:0;
++}
++h1 {
++  font-size:150%;
++  color:#f1f1f1;
++  padding:.5em 2em;
++}
++h2, h4 {
++  color:$secondary_color;
++}
++#hd h1 {
++  color:#e1e1e1;
++  margin-top:.3em;
++}
++h2 {
++  font-size:135%;
++}
++h3, h5 {
++  color:#D85A1A;
++}
++h3 {
++  font-size:120%;
++}
++h4, h5 {
++  font-size:105%%;
++}
++/* end headers */
++
++/* Lists */
++li {
++  list-style-type:disc;
++  margin-left:2.2em;
++}
++/* Floats and others */
++.text-right {
++  text-align:right;
++}
++.float-left {
++  float:left;
++}
++.float-right {
++  float:right;
++} 
++div.date {
++  font-style:italic;
++  font-size:70%;
++  color:#666;
++  margin-bottom:5px;
++}
++/* end floats and others */
++
++/* Tables */
++table {
++  margin-bottom:1em;
++  border:1px solid #615042;
++  border-collapse:separate;
++}
++caption {
++  font-weight:bold;
++  font-size:105%;
++  background-color:#615042;
++  color:#f1f1f1;
++  padding:.4em 1em;
++}
++thead {
++  background-color:#6B859E;
++  color:#f1f1f1;
++}
++tbody {
++  background-color:#fff;
++}
++tfoot {
++  background-color:#6B859E;
++  color:#f1f1f1;
++}
++th {
++  padding:.4em 1em;
++  font-weight:bold;
++  font-size:95%;
++}
++td {
++  padding:.3em .9em;
++ 
++}
++td + td, th + th {
++  border-left:1px solid #615042;
++}
++tfoot tr td {
++  border-top:1px solid #615042;
++}
++tr:nth-child(even) { 
++  background-color: #DEDAD4;
++}
++
++th.sortable a, th.sorted a {
++  display:block;
++  color:#fff;
++  padding-right:1em;
++  background:url('images/run.png') center right no-repeat;
++}
++th.sorted a {
++  background:url('images/down_arrow.png') center right no-repeat;
++}
++/* end tables */
++
++
+diff --git a/spec/controllers/comments_controller_spec.rb b/spec/controllers/comments_controller_spec.rb
+new file mode 100644
+index 0000000..bd37504
+--- /dev/null
++++ b/spec/controllers/comments_controller_spec.rb
+@@ -0,0 +1,18 @@
++require 'spec_helper'
++
++describe CommentsController do
++
++  describe "POST 'create'" do
++    before do
++      @article = Article.create({:title    => "Test Article", 
++                              :content  => "Fancy content", 
++                              :date     => DateTime.now})
++    end
++    
++    #it "should be successful" do
++    #  post "create"
++    #  response.should be_success
++    #end
++  end
++
++end
+diff --git a/spec/controllers/homepage_controller_spec.rb b/spec/controllers/homepage_controller_spec.rb
+new file mode 100644
+index 0000000..5b63781
+--- /dev/null
++++ b/spec/controllers/homepage_controller_spec.rb
+@@ -0,0 +1,5 @@
++require 'spec_helper'
++
++describe HomepageController do
++
++end
+diff --git a/spec/helpers/comments_helper_spec.rb b/spec/helpers/comments_helper_spec.rb
+new file mode 100644
+index 0000000..cc93aa9
+--- /dev/null
++++ b/spec/helpers/comments_helper_spec.rb
+@@ -0,0 +1,15 @@
++require 'spec_helper'
++
++# Specs in this file have access to a helper object that includes
++# the CommentsHelper. For example:
++#
++# describe CommentsHelper do
++#   describe "string concat" do
++#     it "concats two strings with spaces" do
++#       helper.concat_strings("this","that").should == "this that"
++#     end
++#   end
++# end
++describe CommentsHelper do
++  pending "add some examples to (or delete) #{__FILE__}"
++end
+diff --git a/spec/helpers/homepage_helper_spec.rb b/spec/helpers/homepage_helper_spec.rb
+new file mode 100644
+index 0000000..5bfd1f6
+--- /dev/null
++++ b/spec/helpers/homepage_helper_spec.rb
+@@ -0,0 +1,15 @@
++require 'spec_helper'
++
++# Specs in this file have access to a helper object that includes
++# the HomepageHelper. For example:
++#
++# describe HomepageHelper do
++#   describe "string concat" do
++#     it "concats two strings with spaces" do
++#       helper.concat_strings("this","that").should == "this that"
++#     end
++#   end
++# end
++describe HomepageHelper do
++  pending "add some examples to (or delete) #{__FILE__}"
++end
+diff --git a/spec/models/comment_spec.rb b/spec/models/comment_spec.rb
+new file mode 100644
+index 0000000..21300fd
+--- /dev/null
++++ b/spec/models/comment_spec.rb
+@@ -0,0 +1,23 @@
++require 'spec_helper'
++
++describe Comment do
++  before do
++    @article = Article.create({:title    => "Test Article", 
++                            :content  => "Fancy content", 
++                            :date     => DateTime.now})
++    @comment = @article.comments.build({:name => 'Commenter', :body => "Comment"})
++  end
++  
++  it "should save a valid comment" do
++    @comment.should be_valid
++    @comment.save.should == true
++  end
++  
++  it "should fail to save an invalid comment" do
++    @comment.name = nil
++    @comment.should_not be_valid
++    @comment.save.should == false
++  end
++  
++  
++end
+diff --git a/spec/requests/comment_spec.rb b/spec/requests/comment_spec.rb
+new file mode 100644
+index 0000000..5021da5
+--- /dev/null
++++ b/spec/requests/comment_spec.rb
+@@ -0,0 +1,55 @@
++require 'spec_helper'
++
++describe "Comments" do
++  describe "GET comments" do
++    before do
++      @article = Article.create({:title    => "Test Article", 
++                              :content  => "Fancy content", 
++                              :date     => DateTime.now})
++      @comment = @article.comments.build({:name => 'Commenter', :body => "Comment"})
++      @comment.save
++      visit "articles/#{@article.id}"
++    end
++
++    it "should show commenter name in field" do
++      within('.comment_name') do
++        page.should have_content("Commenter")
++      end
++    end
++    
++    it "should show commenter body in field" do
++      within('.comment_body') do
++        page.should have_content(@comment.body)
++      end
++    end
++
++  end
++  
++  describe "Post new comment" do
++    before do
++      @article = Article.create({:title    => "Test Article", 
++                              :content  => "Fancy content", 
++                              :date     => DateTime.now})
++      @comment = @article.comments.build({:name => 'Commenter', :body => "Comment"})
++      visit "articles/#{@article.id}"
++      fill_in "Name", :with => @comment.name
++      fill_in "Body", :with => @comment.body
++      click_on 'Save'
++    end
++    
++    it "should show commenter name in field" do
++      within('.comment_name') do
++        page.should have_content("Commenter")
++      end
++    end
++    
++    it "should show commenter body in field" do
++      within('.comment_body') do
++        page.should have_content(@comment.body)
++      end
++    end
++    
++  end
++  
++  
++end
+diff --git a/spec/requests/homepage_spec.rb b/spec/requests/homepage_spec.rb
+new file mode 100644
+index 0000000..3208b95
+--- /dev/null
++++ b/spec/requests/homepage_spec.rb
+@@ -0,0 +1,8 @@
++require 'spec_helper'
++
++describe "homepage route" do
++  it "should load" do
++    visit "/"
++    page.should have_content("Events") 
++  end
++end
+diff --git a/spec/views/comments/create.html.erb_spec.rb b/spec/views/comments/create.html.erb_spec.rb
+new file mode 100644
+index 0000000..30704d9
+--- /dev/null
++++ b/spec/views/comments/create.html.erb_spec.rb
+@@ -0,0 +1,5 @@
++require 'spec_helper'
++
++describe "comments/create.html.erb" do
++  pending "add some examples to (or delete) #{__FILE__}"
++end
