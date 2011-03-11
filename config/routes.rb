@@ -5,6 +5,8 @@ WhatsUp::Application.routes.draw do
 	end
   end
 
+  match '/syndication' => 'homepage#syndication'
+
   resources :events
 
   resources :articles do

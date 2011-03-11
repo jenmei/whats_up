@@ -1,0 +1,14 @@
+!!! XML
+%rss{:version => "2.0"}
+  %channel
+    %title What's up, y'all?
+    %link= root_url
+    %description A list of the most awesome stuff ever to happen near OSU
+    %language en-us
+    %pubDate= Time.now
+
+    - for item in @items
+      %item
+        %title= item[:title]
+        %description= item[:description]
+        %pubDate= item[:pubDate]
