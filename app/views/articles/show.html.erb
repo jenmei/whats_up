@@ -15,6 +15,29 @@
   <%= @article.content %>
 </p>
 
+<h2>Comments</h2>
+<% @article.comments.each do |comment| %>
+<div class="comment">
+<div class="comment_name"><i><%= comment.name %> @ <%= comment.created_at %></i></div>
+<div class="comment_body"><%= comment.body %></div>
+</div>
+<% end %>
+
+<h2>Add A Comment</h2>
+<% form_for [@article, @article.comments.build] do |f| %>
+<p>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+</p>
+
+<p>
+  <%= f.label :body %>
+  <%= f.text_area :body, :size => '30x5' %>
+</p>
+
+<p><%= f.submit 'Save' %></p>
+<% end %>
+
 
 <%= link_to 'Edit', edit_article_path(@article) %> |
 <%= link_to 'Back', articles_path %>

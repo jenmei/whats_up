@@ -1,7 +1,10 @@
 WhatsUp::Application.routes.draw do
+
   resources :events
 
-  resources :articles
+  resources :articles do
+    resources :comments, :only => [:create]
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
