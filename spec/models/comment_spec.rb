@@ -2,13 +2,15 @@ require 'spec_helper'
 
 describe Comment do
   before do
-    @article = Article.create({:title    => "Test Article", 
+    Article.delete_all
+    @article = Article.create!({:title    => "Test Article", 
                             :content  => "Fancy content", 
                             :date     => DateTime.now})
     @comment = @article.comments.build({:name => 'Commenter', :body => "Comment"})
   end
   
   it "should save a valid comment" do
+    @comment.article_id.should == @article.id
     @comment.should be_valid
     @comment.save.should == true
   end

@@ -9,8 +9,10 @@ gem 'sqlite3'
 gem 'haml'
 gem 'twitter'
 
+gem 'nokogiri'
 group :development, :test do
   gem 'rspec-rails'
+  gem 'fakeweb'
   gem 'capybara'
   gem 'launchy'
   gem 'ruby-debug'

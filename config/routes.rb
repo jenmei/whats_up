@@ -8,11 +8,16 @@ WhatsUp::Application.routes.draw do
   match '/syndication' => 'homepage#syndication'
 
   resources :events
-
+  
   resources :articles do
     resources :comments, :only => [:create]
+    collection do
+      post 'pull_articles'
+    end
   end
   root :to => "homepage#index"
+  
+  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

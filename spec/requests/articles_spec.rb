@@ -8,4 +8,13 @@ describe "Articles" do
       response.status.should be(200)
     end
   end
+  
+  describe "GET /articles/pull_articles" do
+    it "pulls articles" do
+      visit("/articles")
+      click_on 'Fetch'
+      page.should have_content("Articles fetched")
+      current_path.should == "/articles"
+    end
+  end
 end

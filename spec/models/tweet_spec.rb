@@ -1,13 +1,27 @@
 require 'spec_helper'
+require 'fakeweb'
 
 describe Tweet do
+  before :all do
+    FakeWeb.allow_net_connect = false
+  end
   before do
+	dir = File.dirname(__FILE__)
+	resp_body = nil
+	File.open(dir + "/../file_fixtures/twitterresponse.json") do |f|
+		resp_body = f.read
+	end
+	FakeWeb.register_uri(:get, "https://search.twitter.com/search.json?&q=Corvallis&rpp=10&result_type=recent", :body => resp_body, :content_type => "text/json")
+
 	@valid_tweet_params = {
 	  :url => 'http://example.com/',
 	  :author => '@zach',
 	  :date => Time.now,
 	  :content => 'Here is the example tweet content'
 	}
+  end
+  after :all do
+	  FakeWeb.allow_net_connect = true
   end
 
   it "can pull in a twitter search" do
