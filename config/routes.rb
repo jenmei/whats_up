@@ -7,7 +7,11 @@ WhatsUp::Application.routes.draw do
 
   match '/syndication' => 'homepage#syndication'
 
-  resources :events
+  resources :events do
+    collection do
+      post 'pull_events'
+    end
+  end
   
   resources :articles do
     resources :comments, :only => [:create]
