@@ -4,7 +4,7 @@
   <% @articles.each do |a|  %>
   <div>
     <h3><%= link_to a.title, a %></h3>
-    <div class="date"><%= a.date %></div>
+    <div class="date"><%= a.date.to_s(:human) %></div>
     <p><%= a.content.humanize %></p>
   </div>
   <% end %>
@@ -17,7 +17,7 @@
 <% @tweets.each do |t|  %>
   <div>
     <h3><%= link_to t.author, t.url %></h3>
-    <div class="date"><%= t.date %></div>
+    <div class="date"><%= t.date.to_s(:human) %></div>
     <p><%= t.content %></p>
   </div>
   <% end %>
