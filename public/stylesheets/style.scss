@@ -97,6 +97,8 @@ h1, h2, h3, h4, h5 {
 }
 #content > div > div > div {
   padding:.5em;
+  @include rounded_corners;
+  background-color:$text_color;
 }
 #articles {
   background-color:$third_color; 
@@ -105,6 +107,11 @@ h1, h2, h3, h4, h5 {
 #articles h2 {
   color:$text_color;
   background-color:$third_color;
+}
+h1 a, h1 a:visited {
+  color:$text_color;
+  text-decoration:none;
+  border:0;
 }
 h2 a, h2 a:visited {
   color:$text_color;
@@ -116,6 +123,14 @@ h2 a, h2 a:visited {
 #tweets h2 {
   color:$text_color;
   background-color:$secondary_color;
+}
+#events {
+  margin-top:2em;
+  background-color:$fourth_color;
+  @include rounded_corners;
+}
+#events h2 {
+  background-color:$fourth_color;
 }
 h2 {
   margin-top:10px;
@@ -225,5 +240,13 @@ th.sorted a {
   background:url('images/down_arrow.png') center right no-repeat;
 }
 /* end tables */
-
-
+ul#nav {
+  position:absolute;
+  right:40px;
+  top:12px;
+}
+ul#nav li {
+  float:right;
+  color:$text_color;
+  list-style-type:none;
+}

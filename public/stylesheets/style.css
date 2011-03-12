@@ -83,7 +83,10 @@ h1, h2, h3, h4, h5 {
   padding: .7em; }
 
 #content > div > div > div {
-  padding: .5em; }
+  padding: .5em;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  background-color: #f1f1f1; }
 
 #articles {
   background-color: #978e43;
@@ -93,6 +96,11 @@ h1, h2, h3, h4, h5 {
 #articles h2 {
   color: #f1f1f1;
   background-color: #978e43; }
+
+h1 a, h1 a:visited {
+  color: #f1f1f1;
+  text-decoration: none;
+  border: 0; }
 
 h2 a, h2 a:visited {
   color: #f1f1f1; }
@@ -105,6 +113,15 @@ h2 a, h2 a:visited {
 #tweets h2 {
   color: #f1f1f1;
   background-color: #350608; }
+
+#events {
+  margin-top: 2em;
+  background-color: navy;
+  -moz-border-radius: 8px;
+  border-radius: 8px; }
+
+#events h2 {
+  background-color: navy; }
 
 h2 {
   margin-top: 10px; }
@@ -210,3 +227,12 @@ th.sorted a {
   background: url("images/down_arrow.png") center right no-repeat; }
 
 /* end tables */
+ul#nav {
+  position: absolute;
+  right: 40px;
+  top: 12px; }
+
+ul#nav li {
+  float: right;
+  color: #f1f1f1;
+  list-style-type: none; }

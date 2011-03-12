@@ -10,9 +10,14 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
-<h1>Wat's up Corvallis </h1>
+<h1> <%= link_to 'Super Awesome App', root_path %></h1>
+<ul id="nav">
+  <li><%= link_to 'Tweets', tweets_path %></li>
+  <li><%= link_to 'Articles', articles_path %></li>
+  <li><%= link_to 'Events', events_path %></li>
+</ul>
 <div id="content">
-  <%= yield %>
+    <%= yield %>
 </div>
 <div id="footer">
   @copyright CWS 

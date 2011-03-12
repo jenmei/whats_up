@@ -23,6 +23,20 @@
   <% end %>
 </div>
 </div>
-<a href="#">Testo</a>
+<div class="yui3-g">
+
+  <div id="events" class="yui3-u-11-24">
+    <h2><%= link_to 'Events', events_path %></h2>
+    <% @events.each do |e|  %>
+    <div>
+      <h3><%= link_to e.title, e %></h3>
+      <div class="date"><%= e.date %></div>
+      <p><%= e.description %></p>
+    </div>
+    <% end %>
+  </div>
+  <div class="yui3-u-11-24 float-right">
+  </div>
+</div>
 
 <%= link_to "Articles and Events RSS", syndication_url(:format => 'rss') %>

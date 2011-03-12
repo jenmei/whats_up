@@ -2,6 +2,7 @@ class HomepageController < ApplicationController
   def index
     @tweets = Tweet.all
     @articles = Article.all.delete_if { |article| article.not_safe_for_work? }
+    @events = Event.all
   end
 
   def syndication
