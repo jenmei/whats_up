@@ -16,4 +16,16 @@ describe Event do
       @event.rss_data[:pubDate].should respond_to(:strftime)
     end
   end
+  
+  it "should pull events from the osu home page" do
+    Event.fetch_osu
+    Event.all.should_not be_empty
+  end
+  
+  it "should not save duplicate events" do
+    valid_event_params = {:date => Time.now, :title => 'Event Title', :description => 'Event Description'}
+    Event.create(@valid_event_params)
+    event = Event.create(@valid_event_params)
+    event.should be_new_record
+  end
 end

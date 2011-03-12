@@ -1,3 +1,5 @@
+<p id="notice"><%= notice %></p>
+
 <h1>Listing events</h1>
 
 <table>
@@ -25,3 +27,9 @@
 <br />
 
 <%= link_to 'New Event', new_event_path %>
+
+<br />
+<br />
+<%= form_tag pull_events_events_path %>
+<%= submit_tag 'Fetch Events From OSU' %>
+</form>

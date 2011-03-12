@@ -13,4 +13,13 @@ describe "Events" do
     end
 
   end
+  
+  describe "GET /events/pull_events" do
+    it "pulls events" do
+      visit("/events")
+      click_on 'Fetch'
+      page.should have_content("Events fetched")
+      current_path.should == "/events"
+    end
+  end
 end

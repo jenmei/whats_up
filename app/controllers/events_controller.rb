@@ -80,4 +80,9 @@ class EventsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  def pull_events
+    Event.fetch_osu
+    redirect_to(Event, :notice => "Events fetched")
+  end  
 end
