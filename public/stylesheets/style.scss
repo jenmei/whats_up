@@ -13,17 +13,19 @@
 */
 /* Colors */
 $secondary_color: #350608; /*background and h1 headers currently*/
+$third_color: #978E43;
 $osu_orange: #D85A1A;
 $text_color: #f1f1f1;
+$fourth_color: navy;
 
 @mixin border_top {
   border-top:4px solid $osu_orange;
 }
-@mixin rounded_corner {
+@mixin rounded_corners {
   $size: 8px;
   -moz-border-radius:$size;
   border-radius:$size;
-  border:1px solid #000;
+  
 }
 html {
   background-color:$secondary_color;
@@ -41,15 +43,16 @@ body {
 }
 #content {
   background-color:#f1f1f1;
-  padding:.5em 1em;
+  padding:.5em 1.5em;
+  overflow:auto;
   color:#333;
   margin:0 2em 1.5em 2em;
-  @include rounded_corner;  
+  @include rounded_corners;  
 }
 p {
   margin-bottom:.8em;
 }
-a {
+a, a:visited {
   color:$osu_orange;
   border-bottom:1px dotted #D85A1A;
   text-decoration: none;
@@ -71,11 +74,51 @@ em {
 strong {
   font-weight:bold;
 }
-
+th {
+  color:#e1e1e1;
+  background-color:$third_color;
+}
 /* Headers */
 h1, h2, h3, h4, h5 {
   font-weight:bold;
   margin-bottom:.5em;
+}
+#articles > div, #tweets > div {
+  border-top:1px dotted $third_color;
+  padding-top:1em;
+  margin:auto;
+  background-color:#e1e1e1;
+}
+#articles h2+div, #tweets h2+div {
+  border-top:0;
+}
+#content > div > div {
+  padding:.7em;
+}
+#content > div > div > div {
+  padding:.5em;
+}
+#articles {
+  background-color:$third_color; 
+  @include rounded_corners;
+}
+#articles h2 {
+  color:$text_color;
+  background-color:$third_color;
+}
+h2 a, h2 a:visited {
+  color:$text_color;
+}
+#tweets {
+  background-color:$secondary_color;
+  @include rounded_corners;
+}
+#tweets h2 {
+  color:$text_color;
+  background-color:$secondary_color;
+}
+h2 {
+  margin-top:10px;
 }
 h3 {
   margin-bottom:0;

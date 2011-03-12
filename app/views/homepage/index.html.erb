@@ -1,10 +1,26 @@
-<div id="articles">
-  <h2>Articles</h2>
-  <% @article.each do |a|  %>
-    <h3><%= a.title %></h3>
+<div class="yui3-g">
+<div id="articles" class="yui3-u-11-24">
+  <h2><%= link_to 'Articles', articles_path %></h2>
+  <% @articles.each do |a|  %>
+  <div>
+    <h3><%= link_to a.title, a %></h3>
     <div class="date"><%= a.date %></div>
-    <p><%= a.content %></p>
+    <p><%= a.content.humanize %></p>
+  </div>
+  <% end %>
+
+</div>
+<div id="tweets" class="yui3-u-11-24 float-right">
+<% unless @tweets.empty? %>
+  <h2><%= link_to 'Tweets', tweets_path %></h2>
+<% end %>
+<% @tweets.each do |t|  %>
+  <div>
+    <h3><%= link_to t.author, t.url %></h3>
+    <div class="date"><%= t.date %></div>
+    <p><%= t.content %></p>
+  </div>
   <% end %>
 </div>
-
+</div>
 <a href="#">Testo</a>

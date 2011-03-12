@@ -1,6 +1,7 @@
 class HomepageController < ApplicationController
   def index
-    @article = Article.all
+    @tweets = Tweet.all
+    @articles = Article.all
   end
 
   def syndication
