@@ -83,6 +83,7 @@ class TweetsController < ApplicationController
 
   def pull_tweets
 	  Tweet.pull_tweets
+	  flash[:notice] = 'Pulled them twitties'
 	  redirect_to Tweet
 
   end
