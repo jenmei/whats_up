@@ -1,0 +1,21 @@
+%h1 Listing tweets
+
+= flash[:notice]
+
+%table
+  %tr
+    %th Content
+    %th Author
+    %th Date
+    %th Url
+
+  - @tweets.each do |tweet|
+    %tr
+      %td= tweet.content
+      %td= link_to tweet.author, "http://twitter.com/#{tweet.author}"
+      %td= tweet.date.to_s(:human)
+      %td= link_to tweet.url, tweet.url
+
+
+= form_for :pullin_tweets, :url => pull_tweets_tweets_path do |form|
+  = form.submit 'Fetch'
