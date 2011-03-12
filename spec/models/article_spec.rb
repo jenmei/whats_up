@@ -20,6 +20,19 @@ describe Article do
       @article.rss_data[:pubDate].should respond_to(:strftime)
     end
   end
+
+  it "should filter profanity" do
+    Article.delete_all
+    Article.create!(:title => "Ducks rule", :content => "SRSLY", :date => Time.now)
+    @article = Article.first
+    @article.not_safe_for_work?.should be_true
+
+    @article.update_attributes(:title => "Who rules?", :content => "ducks!")
+    @article.not_safe_for_work?.should be_true
+
+    @article.update_attributes(:content => "Beavs rule")
+    @article.not_safe_for_work?.should be_false
+  end
   
   it "should pull articles from the osu home page" do
     Article.delete_all

@@ -1,6 +1,6 @@
 class HomepageController < ApplicationController
   def index
-    @article = Article.all
+    @article = Article.all.delete_if { |article| article.not_safe_for_work? }
   end
 
   def syndication

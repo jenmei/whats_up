@@ -5,6 +5,8 @@ class Article < ActiveRecord::Base
   
   validates_presence_of :title, :content, :date
   validate :unique_article
+
+  PROFANITY = %w{ duck uofo hippies hippy }
   
   def unique_article
     articles = Article.where(:title => self.title, :content => self.content, :date => self.date).all
@@ -12,6 +14,15 @@ class Article < ActiveRecord::Base
     if articles.any?
       errors.add(:base, "Articles must be unique")
     end
+  end
+
+  def not_safe_for_work?
+    for word in PROFANITY
+      regex = /#{word}/i
+      return true if title =~ regex
+      return true if content =~ regex
+    end
+    return false
   end
 
   def Article.fetch_osu
