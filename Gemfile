@@ -8,8 +8,8 @@ gem 'rails', '3.0.5'
 gem 'sqlite3'
 gem 'haml'
 gem 'twitter'
-
 gem 'nokogiri'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'fakeweb'

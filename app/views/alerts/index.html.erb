@@ -1,13 +1,14 @@
 <h1>Listing alerts</h1>
 
+<% form_for :alert, :url => { :action => 'refresh' } do |f| %>
+  <%= f.submit :value => 'Refresh' %>
+<% end %>
+
 <table>
   <tr>
     <th>Title</th>
     <th>Date</th>
     <th>Summary</th>
-    <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @alerts.each do |alert| %>
@@ -15,9 +16,6 @@
     <td><%= alert.title %></td>
     <td><%= alert.date %></td>
     <td><%= alert.summary %></td>
-    <td><%= link_to 'Show', alert %></td>
-    <td><%= link_to 'Edit', edit_alert_path(alert) %></td>
-    <td><%= link_to 'Destroy', alert, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

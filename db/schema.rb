@@ -12,6 +12,15 @@
 
 ActiveRecord::Schema.define(:version => 20110311231238) do
 
+  create_table "alerts", :force => true do |t|
+    t.string   "title"
+    t.datetime "date"
+    t.text     "summary"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "hash"
+  end
+
   create_table "articles", :force => true do |t|
     t.string   "title"
     t.datetime "date"

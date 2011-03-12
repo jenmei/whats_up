@@ -10,6 +10,20 @@ class AlertsController < ApplicationController
     end
   end
 
+  def refresh
+    if params[:commit] == 'Refresh'
+      new_alerts = Alert.fetch('http://oregonstate.edu/osuhomepage/data/alerts-1.xml');
+      new_alerts.each do |x|
+        begin
+          Alert.create!(x)
+        rescue
+          nil
+        end
+      end
+    end
+    redirect_to :action => 'index'
+  end
+
   # GET /alerts/1
   # GET /alerts/1.xml
   def show

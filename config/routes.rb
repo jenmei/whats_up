@@ -5,6 +5,7 @@ WhatsUp::Application.routes.draw do
 	end
   end
   resources :alerts
+  match 'alerts/refresh' => 'alerts#refresh'
 
   resources :events
 
