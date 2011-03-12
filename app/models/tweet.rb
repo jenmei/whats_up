@@ -8,7 +8,7 @@ class Tweet < ActiveRecord::Base
 
 	def self.pull_tweets
 		search = Twitter::Search.new
-		search.containing("Corvallis").result_type("recent").per_page(10).each do |r|
+		search.containing("Corvallis Oregon State").result_type("recent").per_page(10).each do |r|
 			tweet_params={
 				:content => r.text,
 				:author => r.from_user,

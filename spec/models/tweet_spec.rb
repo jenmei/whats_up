@@ -11,7 +11,7 @@ describe Tweet do
 	File.open(dir + "/../file_fixtures/twitterresponse.json") do |f|
 		resp_body = f.read
 	end
-	FakeWeb.register_uri(:get, "https://search.twitter.com/search.json?&q=Corvallis&rpp=10&result_type=recent", :body => resp_body, :content_type => "text/json")
+	FakeWeb.register_uri(:get, "https://search.twitter.com/search.json?&q=Corvallis%20Oregon%20State&rpp=10&result_type=recent", :body => resp_body, :content_type => "text/json")
 
 	@valid_tweet_params = {
 	  :url => 'http://example.com/',
